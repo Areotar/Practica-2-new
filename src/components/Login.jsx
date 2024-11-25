@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Mensaje from "./Mensaje";
+import AdminMenu from "./Admin";
 
 export default function Login({ setMessage }) {
 
     const [mensaje, setMensaje] = useState("")
     const [creacion, setCreacion] = useState("")
+    const [role, setRole] = useState(false)
 
     const [data, setData] = useState({
         email: "",
@@ -84,6 +86,11 @@ export default function Login({ setMessage }) {
                     localStorage.setItem("response.id", responseData.user._id)
                     setMensaje(`¡Inicio de sesión exitoso! Bienvenido.`);
                 }
+
+                if (responseData.user.role === 'admin') {
+                    setRole(true)
+                }
+
             })
             .catch(error => {
                 setMessage("Error: usuario o contraseña incorrectos.");
@@ -192,7 +199,8 @@ export default function Login({ setMessage }) {
             <div>
                 <button onClick={handleLogin}>Iniciar Sesion</button>
                 <button onClick={handleDelete}>Eliminar Sesion</button>
-                <Mensaje mensaje={mensaje}/>
+                <Mensaje mensaje={mensaje} />
+                <AdminMenu role={role} />
             </div>
 
             <hr></hr>
@@ -255,7 +263,7 @@ export default function Login({ setMessage }) {
                     onChange={(event) => handleCheckBox(event)}
                 />
                 <button onClick={handleReg}>Crear usuario</button>
-                <Mensaje mensaje={creacion}/>
+                <Mensaje mensaje={creacion} />
             </div>
 
             <hr></hr>
